@@ -4,8 +4,10 @@
  */
 package poly.cafe.ui.manager;
 
+import java.awt.HeadlessException;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import poly.cafe.dao.impl.RevenueDAO;
@@ -23,17 +25,19 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
 
     /**
      * Creates new form RevenueManagerJDialog
+     * @param parent
+     * @param modal
      */
     public RevenueManagerJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cboTimeRanges.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hôm nay", "Tuần này", "Tháng này", "Quý này", "Năm nay"}));
+        cboTimeRanges.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Hôm nay", "Tuần này", "Tháng này", "Quý này", "Năm nay"}));
         tabs.addChangeListener(new javax.swing.event.ChangeListener() {
-        @Override
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            tabsStateChanged(evt);
-        }
-    });
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabsStateChanged(evt);
+            }
+        });
     }
 
     /**
@@ -58,8 +62,10 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblByUser = new javax.swing.JTable();
+        btnXuatExcel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Doanh thu");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -147,27 +153,40 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
 
         tabs.addTab("Doanh thu từng nhân viên", jPanel2);
 
+        btnXuatExcel.setText("Xuất Excel");
+        btnXuatExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatExcelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(14, 14, 14)
-                .addComponent(txtBegin, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cboTimeRanges, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabs))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabs)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(14, 14, 14)
+                                .addComponent(txtBegin, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboTimeRanges, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(108, 108, 108))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnXuatExcel)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,7 +201,9 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
                     .addComponent(cboTimeRanges, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnXuatExcel)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -199,6 +220,10 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
     private void cboTimeRangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTimeRangesActionPerformed
         this.selectTimeRange();
     }//GEN-LAST:event_cboTimeRangesActionPerformed
+
+    private void btnXuatExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatExcelActionPerformed
+        xuatExcel();
+    }//GEN-LAST:event_btnXuatExcelActionPerformed
 
     private void tabsStateChanged(javax.swing.event.ChangeEvent evt) {
         this.fillRevenue();
@@ -246,6 +271,7 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFilter;
+    private javax.swing.JButton btnXuatExcel;
     private javax.swing.JComboBox<String> cboTimeRanges;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -259,8 +285,9 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
     private javax.swing.JTextField txtBegin;
     private javax.swing.JTextField txtEnd;
     // End of variables declaration//GEN-END:variables
-    
+
     RevenueDAO dao = new RevenueDAOImpl();
+
     @Override
     public void open() {
         this.setLocationRelativeTo(null);
@@ -272,11 +299,16 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
     public void selectTimeRange() {
         TimeRange range = TimeRange.today();
         switch (cboTimeRanges.getSelectedIndex()) {
-            case 0 -> range = TimeRange.thisYear();
-            case 1 -> range = TimeRange.thisWeek();
-            case 2 -> range = TimeRange.thisMonth();
-            case 3 -> range = TimeRange.thisQuarter();
-            case 4 -> range = TimeRange.today();
+            case 0 ->
+                range = TimeRange.thisYear();
+            case 1 ->
+                range = TimeRange.thisWeek();
+            case 2 ->
+                range = TimeRange.thisMonth();
+            case 3 ->
+                range = TimeRange.thisQuarter();
+            case 4 ->
+                range = TimeRange.today();
         }
         txtBegin.setText(XDate.format(range.getBegin(), "dd/MM/yyyy"));
         txtEnd.setText(XDate.format(range.getEnd(), "dd/MM/yyyy"));
@@ -308,44 +340,99 @@ public class RevenueManagerJDialog extends javax.swing.JDialog implements Revenu
             }
 
             switch (tabs.getSelectedIndex()) {
-                case 0 -> this.fillRevenueByCategory(begin, end);
-                case 1 -> this.fillRevenueByUser(begin, end);
+                case 0 ->
+                    this.fillRevenueByCategory(begin, end);
+                case 1 ->
+                    this.fillRevenueByUser(begin, end);
             }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
-        e.printStackTrace();
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+        }
     }
-    }
+
     private void fillRevenueByCategory(Date begin, Date end) {
         List<Revenue.ByCategory> items = dao.getByCategory(begin, end);
         DefaultTableModel model = (DefaultTableModel) tblByCategory.getModel();
         model.setRowCount(0);
         items.forEach(item -> {
-        Object[] row = {
-            item.getCategory(),
-            String.format("$%.2f", item.getRevenue()),
-            item.getQuantity(),
-            String.format("$%.2f", item.getMinPrice()),
-            String.format("$%.2f", item.getMaxPrice()),
-            String.format("$%.2f", item.getAvgPrice())
-        };
-        model.addRow(row);
-    });
-}
-private void fillRevenueByUser(Date begin, Date end) {
-    List<Revenue.ByUser> items = dao.getByUser(begin, end);
+            Object[] row = {
+                item.getCategory(),
+                String.format("$%.2f", item.getRevenue()),
+                item.getQuantity(),
+                String.format("$%.2f", item.getMinPrice()),
+                String.format("$%.2f", item.getMaxPrice()),
+                String.format("$%.2f", item.getAvgPrice())
+            };
+            model.addRow(row);
+        });
+    }
+
+    private void fillRevenueByUser(Date begin, Date end) {
+        List<Revenue.ByUser> items = dao.getByUser(begin, end);
         DefaultTableModel model = (DefaultTableModel) tblByUser.getModel();
         model.setRowCount(0);
         items.forEach(item -> {
-        Object[] row = {
-            item.getUser(),
-            String.format("$%.2f", item.getRevenue()),
-            item.getQuantity(),
-            XDate.format(item.getFirstTime(), "hh:mm:ss dd-MM-yyyy"),
-            XDate.format(item.getLastTime(), "hh:mm:ss dd-MM-yyyy")
-        };
+            Object[] row = {
+                item.getUser(),
+                String.format("$%.2f", item.getRevenue()),
+                item.getQuantity(),
+                XDate.format(item.getFirstTime(), "hh:mm:ss dd-MM-yyyy"),
+                XDate.format(item.getLastTime(), "hh:mm:ss dd-MM-yyyy")
+            };
             model.addRow(row);
         });
+    }
+
+    private void xuatExcel() {
+        javax.swing.JTable table;
+        String sheetName;
+
+        if (tabs.getSelectedIndex() == 0) {
+            table = tblByCategory;
+            sheetName = "DoanhThuTheoLoai";
+        } else {
+            table = tblByUser;
+            sheetName = "DoanhThuTheoNhanVien";
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Lưu file Excel");
+        int userSelection = chooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            java.io.File fileToSave = chooser.getSelectedFile();
+            if (!fileToSave.getAbsolutePath().endsWith(".xlsx")) {
+                fileToSave = new java.io.File(fileToSave.getAbsolutePath() + ".xlsx");
+            }
+
+            try (org.apache.poi.xssf.usermodel.XSSFWorkbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook()) {
+                org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet(sheetName);
+
+                // Ghi header
+                org.apache.poi.ss.usermodel.Row headerRow = sheet.createRow(0);
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                    headerRow.createCell(i).setCellValue(table.getColumnName(i));
+                }
+
+                // Ghi dữ liệu
+                for (int i = 0; i < table.getRowCount(); i++) {
+                    org.apache.poi.ss.usermodel.Row row = sheet.createRow(i + 1);
+                    for (int j = 0; j < table.getColumnCount(); j++) {
+                        Object value = table.getValueAt(i, j);
+                        row.createCell(j).setCellValue(value == null ? "" : value.toString());
+                    }
+                }
+
+                // Ghi file ra đĩa
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(fileToSave)) {
+                    workbook.write(fos);
+                }
+
+                JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xuất Excel: " + e.getMessage());
+            }
+        }
     }
 }

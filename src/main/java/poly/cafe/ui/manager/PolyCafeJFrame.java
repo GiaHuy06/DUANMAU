@@ -6,6 +6,7 @@ package poly.cafe.ui.manager;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import poly.cafe.ui.PolyCafeController;
 import poly.cafe.util.XAuth;
 import poly.cafe.util.XIcon;
@@ -39,6 +40,9 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         btnExit = new javax.swing.JButton();
         btnChangePassword = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnLogOut = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Poly Cafe");
@@ -48,79 +52,98 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         pnlManager.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnDrinkManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDrinkManager.setForeground(new java.awt.Color(255, 255, 255));
         btnDrinkManager.setText("ĐỒ UỐNG");
+        btnDrinkManager.setContentAreaFilled(false);
         btnDrinkManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDrinkManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnDrinkManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 200, 50));
+        pnlManager.add(btnDrinkManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 200, 50));
 
         btnBillManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnBillManager.setForeground(new java.awt.Color(255, 255, 255));
         btnBillManager.setText("PHIẾU BÁN HÀNG");
+        btnBillManager.setContentAreaFilled(false);
         btnBillManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBillManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnBillManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 200, 50));
+        pnlManager.add(btnBillManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 200, 50));
 
         btnCategoryManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCategoryManager.setForeground(new java.awt.Color(255, 255, 255));
         btnCategoryManager.setText("LOẠI ĐỒ UỐNG");
+        btnCategoryManager.setContentAreaFilled(false);
         btnCategoryManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoryManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnCategoryManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 340, 200, 50));
+        pnlManager.add(btnCategoryManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 200, 50));
 
         btnUserManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUserManager.setForeground(new java.awt.Color(255, 255, 255));
         btnUserManager.setText("NGƯỜI SỬ DỤNG");
+        btnUserManager.setContentAreaFilled(false);
         btnUserManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUserManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnUserManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 400, 200, 50));
+        pnlManager.add(btnUserManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 200, 50));
 
         btnCardManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCardManager.setForeground(new java.awt.Color(255, 255, 255));
         btnCardManager.setText("THẺ ĐỊNH DANH");
+        btnCardManager.setContentAreaFilled(false);
         btnCardManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCardManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnCardManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 340, 200, 50));
+        pnlManager.add(btnCardManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, 200, 50));
 
         btnRevenueManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRevenueManager.setForeground(new java.awt.Color(255, 255, 255));
         btnRevenueManager.setText("DOANH THU");
+        btnRevenueManager.setContentAreaFilled(false);
         btnRevenueManager.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRevenueManagerActionPerformed(evt);
             }
         });
-        pnlManager.add(btnRevenueManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 400, 200, 50));
+        pnlManager.add(btnRevenueManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 330, 200, 50));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/poly/cafe/icons/coffee-shop.jpg"))); // NOI18N
-        pnlManager.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 670, 490));
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/poly/cafe/icons/Nen_Shop.jpg"))); // NOI18N
+        pnlManager.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, -10, 700, 400));
 
-        pnlCenter.add(pnlManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(3, 6, -1, -1));
+        pnlCenter.add(pnlManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 390));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/poly/cafe/icons/coffee-shop.jpg"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/poly/cafe/icons/Nen_Shop.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
-        pnlCenter.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 6, 672, -1));
+        jLabel2.setPreferredSize(new java.awt.Dimension(700, 448));
+        pnlCenter.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 390));
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 0));
 
         lblPhoto.setBackground(new java.awt.Color(204, 204, 204));
         lblPhoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblPhoto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 51, 0)));
 
-        lblFullname.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblFullname.setForeground(new java.awt.Color(255, 102, 51));
+        lblFullname.setFont(new java.awt.Font("Source Sans Pro Black", 1, 18)); // NOI18N
+        lblFullname.setForeground(new java.awt.Color(255, 0, 51));
         lblFullname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFullname.setToolTipText("");
 
+        btnSales.setBackground(new java.awt.Color(204, 204, 204));
         btnSales.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSales.setForeground(new java.awt.Color(255, 255, 255));
         btnSales.setText("BÁN HÀNG");
+        btnSales.setContentAreaFilled(false);
         btnSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalesActionPerformed(evt);
@@ -128,23 +151,31 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         });
 
         btnHistory.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnHistory.setForeground(new java.awt.Color(255, 255, 255));
         btnHistory.setText(" LỊCH SỬ");
+        btnHistory.setContentAreaFilled(false);
         btnHistory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistoryActionPerformed(evt);
             }
         });
 
+        btnExit.setBackground(new java.awt.Color(204, 204, 204));
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnExit.setForeground(new java.awt.Color(255, 255, 255));
         btnExit.setText("KẾT THÚC");
+        btnExit.setContentAreaFilled(false);
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
             }
         });
 
+        btnChangePassword.setBackground(new java.awt.Color(204, 204, 204));
         btnChangePassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnChangePassword.setForeground(new java.awt.Color(255, 255, 255));
         btnChangePassword.setText("ĐỔI MẬT KHẨU");
+        btnChangePassword.setContentAreaFilled(false);
         btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangePasswordActionPerformed(evt);
@@ -152,6 +183,24 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         });
 
         jSeparator1.setForeground(new java.awt.Color(255, 153, 51));
+
+        jLabel3.setFont(new java.awt.Font("Source Sans Pro Black", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel3.setText("Chào mừng");
+
+        jLabel4.setFont(new java.awt.Font("Source Sans Pro Black", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel4.setText("đã đến với Poly Coffee");
+
+        btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLogOut.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogOut.setText("ĐĂNG XUẤT");
+        btnLogOut.setContentAreaFilled(false);
+        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogOutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -161,39 +210,57 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnChangePassword, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                            .addComponent(btnSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                        .addContainerGap()
+                        .addComponent(btnSales, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
+                        .addContainerGap()
+                        .addComponent(btnChangePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(lblFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+                                .addComponent(btnLogOut)))))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(lblFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSales, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFullname, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogOut)
+                        .addGap(15, 15, 15)))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnChangePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSales, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                    .addComponent(btnHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnChangePassword, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -201,18 +268,21 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addComponent(pnlCenter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -258,6 +328,10 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
         this.showChangePasswordJDialog(this);
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
+    private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
+        logout(this);
+    }//GEN-LAST:event_btnLogOutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -300,11 +374,14 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
     private javax.swing.JButton btnDrinkManager;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnHistory;
+    private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnRevenueManager;
     private javax.swing.JButton btnSales;
     private javax.swing.JButton btnUserManager;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblFullname;
@@ -314,48 +391,59 @@ public final class PolyCafeJFrame extends javax.swing.JFrame implements PolyCafe
     // End of variables declaration//GEN-END:variables
     @Override
     public void init() {
-        this.setIconImage(XIcon.getIcon("trump-small.png").getImage());
+//        this.setIconImage(XIcon.getIcon("trump-small.png").getImage());
         this.setLocationRelativeTo(null);
         this.showWelcomeJDialog(this);
         this.showLoginJDialog(this);
-        XIcon.setIcon(lblPhoto, "E:\\Java1\\PC10722\\src\\main\\java\\poly\\cafe\\images\\" + XAuth.user.getPhoto());
+        XIcon.setIcon(lblPhoto, "images/" + XAuth.user.getPhoto());
         lblFullname.setText(XAuth.user.getFullname());
         if (!XAuth.user.isManager()) {
             pnlCenter.remove(pnlManager);
         }
     }
+
     @Override
     public void exit() {
-        PolyCafeController.super.exit(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.exit();
+    }
+
+    public static void logout(JFrame currentFrame) {
+        int confirm = JOptionPane.showConfirmDialog(currentFrame, "Bạn có chắc chắn muốn đăng xuất?", "Đăng xuất", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            XAuth.user = null;
+            currentFrame.dispose(); // Đóng giao diện chính
+
+            new PolyCafeJFrame().setVisible(true);
+        }
     }
 
     @Override
     public void showJDialog(JDialog dialog) {
-        PolyCafeController.super.showJDialog(dialog); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showJDialog(dialog);
     }
 
     @Override
     public void showWelcomeJDialog(JFrame frame) {
-        PolyCafeController.super.showWelcomeJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showWelcomeJDialog(frame);
     }
 
     @Override
     public void showLoginJDialog(JFrame frame) {
-        PolyCafeController.super.showLoginJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showLoginJDialog(frame);
     }
 
     @Override
     public void showChangePasswordJDialog(JFrame frame) {
-        PolyCafeController.super.showChangePasswordJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showChangePasswordJDialog(frame);
     }
 
     @Override
     public void showSalesJDialog(JFrame frame) {
-        PolyCafeController.super.showSalesJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showSalesJDialog(frame);
     }
 
     @Override
     public void showHistoryJDialog(JFrame frame) {
-        PolyCafeController.super.showHistoryJDialog(frame); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        PolyCafeController.super.showHistoryJDialog(frame);
     }
 }

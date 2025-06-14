@@ -19,4 +19,6 @@ import lombok.Data;
 public class Card {
 private Integer id;
 private int status;
+private String createdBy;
+
 }

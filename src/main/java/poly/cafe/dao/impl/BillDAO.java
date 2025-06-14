@@ -13,6 +13,7 @@ import poly.cafe.entity.Bill;
  * @author admin
  */
 public interface BillDAO extends CrudDAO<Bill, Long>{
+    void insert(Bill bill);
     List<Bill> findByUsername(String username);
     List<Bill> findByCardId(Integer cardId);
     List<Bill> findByTimeRange(Date begin, Date end);

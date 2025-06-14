@@ -19,6 +19,9 @@ public class CardDAOImpl implements CardDAO {
     String deleteSql = "DELETE FROM Cards WHERE Id=?";
     String findAllSql = "SELECT * FROM Cards";
     String findByIdSql = "SELECT * FROM Cards WHERE Id=?";
+    String findByCreatorSql = "SELECT * FROM Cards WHERE createdBy = ?";
+
+
 
     @Override
     public Card create(Card entity) {
@@ -53,4 +56,8 @@ public class CardDAOImpl implements CardDAO {
         return XQuery.getSingleBean(Card.class, findByIdSql, id);
     }
     
+    public List<Card> findByCreator(String username) {
+        return XQuery.getBeanList(Card.class, findByCreatorSql, username);
+    }
+
 }

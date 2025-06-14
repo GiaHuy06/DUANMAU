@@ -15,4 +15,5 @@ public interface BillDetailDAO extends CrudDAO<BillDetail, Long>{
     List<BillDetail> findByBillId(Long billId);
     List<BillDetail> findByDrinkId(String drinkId);
     List<BillDetail> selectByBillId(Long billId);
+    BillDetail selectByBillIdAndDrinkId(Long billId, String drinkId);
 }

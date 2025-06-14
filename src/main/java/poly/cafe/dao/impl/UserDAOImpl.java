@@ -14,8 +14,8 @@ import poly.cafe.util.XQuery;
  * @author admin
  */
 public class UserDAOImpl implements UserDAO {
-    String createSql = "INSERT INTO Users(Username, Password, Enabled, Fullname, Photo, Manager) VALUES(?, ?, ?, ?, ?, ?)";
-    String updateSql = "UPDATE Users SET Password=?, Enabled=?, Fullname=?, Photo=?, Manager=? WHERE Username=?";
+    String createSql = "INSERT INTO Users(Username, Password, Enabled, Fullname, Photo, Manager, Email) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    String updateSql = "UPDATE Users SET Password=?, Enabled=?, Fullname=?, Photo=?, Manager=?, Email=? WHERE Username=?";
     String deleteSql = "DELETE FROM Users WHERE Username=?";
     String findAllSql = "SELECT * FROM Users";
     String findByIdSql = "SELECT * FROM Users WHERE Username=?";
@@ -28,7 +28,8 @@ public class UserDAOImpl implements UserDAO {
             entity.isEnabled(),
             entity.getFullname(),
             entity.getPhoto(),
-            entity.isManager()
+            entity.isManager(),
+            entity.getEmail()
         };
         XJdbc.executeUpdate(createSql, values);
         return entity;
@@ -42,6 +43,7 @@ public class UserDAOImpl implements UserDAO {
             entity.getFullname(),
             entity.getPhoto(),
             entity.isManager(),
+            entity.getEmail(), 
             entity.getUsername()
         };
         XJdbc.executeUpdate(updateSql, values);
@@ -61,5 +63,11 @@ public class UserDAOImpl implements UserDAO {
     public User findById(String id) {
         return XQuery.getSingleBean(User.class, findByIdSql, id);
     }
-    
+
+    @Override
+    public User findByEmail(String email) {
+        String sql = "SELECT * FROM Users WHERE Email = ?";
+        return XQuery.getSingleBean(User.class, sql, email);
+    }
+
 }

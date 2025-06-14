@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,15 +20,18 @@ import poly.cafe.dao.impl.CardDAO;
 import poly.cafe.dao.impl.CardDAOImpl;
 import poly.cafe.entity.Bill;
 import poly.cafe.entity.Card;
+import poly.cafe.util.XAuth;
+import poly.cafe.util.XDialog;
 
 /**
  *
  * @author admin
  */
-public class SalesJDialog extends javax.swing.JDialog implements SalesController{
+public class SalesJDialog extends javax.swing.JDialog implements SalesController {
 
     /**
      * Creates new form SalesJDialog
+     *
      * @param parent
      * @param modal
      */
@@ -48,13 +52,14 @@ public class SalesJDialog extends javax.swing.JDialog implements SalesController
         pnlCards = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Thẻ định danh");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
 
-        pnlCards.setLayout(new java.awt.GridLayout(1, 6, 5, 5));
+        pnlCards.setLayout(new java.awt.GridLayout(0, 6, 5, 5));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,7 +74,7 @@ public class SalesJDialog extends javax.swing.JDialog implements SalesController
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlCards, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(444, Short.MAX_VALUE))
+                .addContainerGap(449, Short.MAX_VALUE))
         );
 
         pack();
@@ -134,11 +139,28 @@ public class SalesJDialog extends javax.swing.JDialog implements SalesController
     public void showBillJDialog(int cardId) {
         BillDAO dao = new BillDAOImpl();
         Bill bill = dao.findServicingByCardId(cardId); // tải bill đang phục vụ của thẻ
+        // Nếu hóa đơn tồn tại và không phải của nhân viên hiện tại → chặn sửa
+        if (bill != null && !bill.getUsername().equals(XAuth.user.getUsername())) {
+            XDialog.alert("Bạn không có quyền chỉnh sửa hóa đơn này!\nĐơn này đang do nhân viên khác phụ trách.");
+            return;
+        }
+
+        // Nếu chưa có hóa đơn, tạo mới và gán người tạo là nhân viên hiện tại
+        if (bill == null) {
+            bill = new Bill();
+            bill.setCardId(cardId);
+            bill.setCheckin(new Date());
+            bill.setStatus(Bill.Status.Servicing.ordinal());
+            bill.setUsername(XAuth.user.getUsername());
+            dao.insert(bill); // lưu vào database
+            bill = dao.findServicingByCardId(cardId); // load lại hóa đơn sau khi insert
+        }
+
         BillJDialog dialog = new BillJDialog((Frame) this.getOwner(), true);
-        dialog.setBill(bill); // Cần khai báo vào BillJDialog @Setter Bill bill
-        dialog.setVisible(true);
+        dialog.setBill(bill);
+        dialog.setVisible(true); // Cần khai báo vào BillJDialog @Setter Bill bill
     }
-    
+
     private void loadCards() {// tải và hiển thị các thẻ lên cửa sổ bán hàng
         CardDAO dao = new CardDAOImpl();
         List<Card> cards = dao.findAll();
@@ -147,7 +169,7 @@ public class SalesJDialog extends javax.swing.JDialog implements SalesController
         pnlCards.revalidate();
         pnlCards.repaint();
     }
-    
+
     private JButton createButton(Card card) { // tạo Jbutton cho thẻ
 //        JButton btnCard = new JButton();
 //        btnCard.setText(String.format("Card #%d", card.getId()));
@@ -160,53 +182,53 @@ public class SalesJDialog extends javax.swing.JDialog implements SalesController
 //        SalesJDialog.this.showBillJDialog(cardId);
 //        });
 //        return btnCard;
-            int width = 120;
-            int height = 80;
+        int width = 120;
+        int height = 80;
 
-            // Load và scale ảnh nền
-            ImageIcon originalIcon = new ImageIcon(getClass().getResource("/poly/cafe/icons/coffee-shop.jpg"));
-            Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        // Load và scale ảnh nền
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/poly/cafe/icons/coffee-shop.jpg"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-            // Tạo nút
-            JButton btnCard = new JButton("Card #" + card.getId());
-            btnCard.setIcon(scaledIcon);
+        // Tạo nút
+        JButton btnCard = new JButton("Card #" + card.getId());
+        btnCard.setIcon(scaledIcon);
 
-            // Căn giữa chữ và hình ảnh
-            btnCard.setHorizontalTextPosition(SwingConstants.CENTER);
-            btnCard.setVerticalTextPosition(SwingConstants.CENTER);
+        // Căn giữa chữ và hình ảnh
+        btnCard.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnCard.setVerticalTextPosition(SwingConstants.CENTER);
 
-            // Font và màu chữ
-            btnCard.setFont(new Font("Arial", Font.BOLD, 16));
-            btnCard.setForeground(Color.BLACK);
+        // Font và màu chữ
+        btnCard.setFont(new Font("Arial", Font.BOLD, 16));
+        btnCard.setForeground(Color.BLACK);
 
-            // Trạng thái bật/tắt tùy theo status
-            boolean isEnabled = card.getStatus() == 0;
-            btnCard.setEnabled(isEnabled);
+        // Trạng thái bật/tắt tùy theo status
+        boolean isEnabled = card.getStatus() == 0;
+        btnCard.setEnabled(isEnabled);
 
-            // Nếu không bật, đổi màu chữ mờ hơn để phân biệt rõ
-            if (!isEnabled) {
-                btnCard.setForeground(Color.LIGHT_GRAY);
-            }
+        // Nếu không bật, đổi màu chữ mờ hơn để phân biệt rõ
+        if (!isEnabled) {
+            btnCard.setForeground(Color.LIGHT_GRAY);
+        }
 
-            // Không viền, không focus
-            btnCard.setContentAreaFilled(false);
-            btnCard.setBorderPainted(false);
-            btnCard.setFocusPainted(false);
+        // Không viền, không focus
+        btnCard.setContentAreaFilled(false);
+        btnCard.setBorderPainted(false);
+        btnCard.setFocusPainted(false);
 
-            // Kích thước cố định
-            btnCard.setPreferredSize(new Dimension(width, height));
+        // Kích thước cố định
+        btnCard.setPreferredSize(new Dimension(width, height));
 
-            // Gán hành động nếu nút được bật
-            if (isEnabled) {
-                btnCard.setActionCommand(String.valueOf(card.getId()));
-                btnCard.addActionListener(e -> {
-                    int cardId = Integer.parseInt(e.getActionCommand());
-                    SalesJDialog.this.showBillJDialog(cardId);
-                });
-            }
+        // Gán hành động nếu nút được bật
+        if (isEnabled) {
+            btnCard.setActionCommand(String.valueOf(card.getId()));
+            btnCard.addActionListener(e -> {
+                int cardId = Integer.parseInt(e.getActionCommand());
+                SalesJDialog.this.showBillJDialog(cardId);
+            });
+        }
 
-            return btnCard;
+        return btnCard;
 
     }
 }

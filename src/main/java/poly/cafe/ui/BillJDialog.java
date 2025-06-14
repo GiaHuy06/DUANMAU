@@ -4,7 +4,6 @@
  */
 package poly.cafe.ui;
 
-import java.awt.Frame;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -15,27 +14,30 @@ import poly.cafe.dao.impl.BillDetailDAO;
 import poly.cafe.dao.impl.BillDetailDAOImpl;
 import poly.cafe.entity.Bill;
 import poly.cafe.entity.BillDetail;
+import poly.cafe.util.XAuth;
 import poly.cafe.util.XDate;
 import poly.cafe.util.XDialog;
-
 
 /**
  *
  * @author admin
  */
-public final class BillJDialog extends javax.swing.JDialog implements BillController{
+public final class BillJDialog extends javax.swing.JDialog implements BillController {
 
     /**
      * Creates new form BillJDialog
+     *
      * @param parent
+     * @param modal
      */
     public BillJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.bill = bill;
         initComponents();
-        
+
     }
     private Bill bill;
+
     @Override
     public void setBill(Bill bill) {
         this.bill = bill;
@@ -44,15 +46,23 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
 
     private void fillToForm() {
         if (bill != null) {
-        txtId.setText(bill.getId() != null ? String.valueOf(bill.getId()) : "");
-        txtCardId.setText(bill.getCardId() != null ? String.valueOf(bill.getCardId()) : "");
-        txtCheckin.setText(bill.getCheckin() != null ? XDate.toString(bill.getCheckin()) : "");
-        txtCheckout.setText(bill.getCheckout() != null ? XDate.toString(bill.getCheckout()) : "");
-        txtUsername.setText(bill.getUsername() != null ? bill.getUsername() : "");
-        txtStatus.setText(String.valueOf(bill.getStatus()));
-        fillBillDetails();
+            txtId.setText(bill.getId() != null ? String.valueOf(bill.getId()) : "");
+            txtCardId.setText(bill.getCardId() != null ? String.valueOf(bill.getCardId()) : "");
+            txtCheckin.setText(bill.getCheckin() != null ? XDate.toString(bill.getCheckin()) : "");
+            txtCheckout.setText(bill.getCheckout() != null ? XDate.toString(bill.getCheckout()) : "");
+            txtUsername.setText(bill.getUsername() != null ? bill.getUsername() : "");
+            txtStatus.setText(String.valueOf(bill.getStatus()));
+            // Vô hiệu hóa chỉnh sửa các trường
+            txtId.setEditable(false);
+            txtCardId.setEditable(false);
+            txtCheckin.setEditable(false);
+            txtCheckout.setEditable(false);
+            txtUsername.setEditable(false);
+            txtStatus.setEditable(false);
+            fillBillDetails();
+        }
     }
-    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,8 +90,10 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
         btnAdd = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnCheckout = new javax.swing.JButton();
+        btnTotalAmount = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Bill");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -154,6 +166,13 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
             }
         });
 
+        btnTotalAmount.setText("Tổng tiền");
+        btnTotalAmount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTotalAmountActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,6 +185,8 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTotalAmount)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCheckout)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancel))
@@ -223,7 +244,8 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
                     .addComponent(btnRemove)
                     .addComponent(btnAdd)
                     .addComponent(btnCancel)
-                    .addComponent(btnCheckout))
+                    .addComponent(btnCheckout)
+                    .addComponent(btnTotalAmount))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -260,6 +282,10 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         this.close();
     }//GEN-LAST:event_formWindowClosed
+
+    private void btnTotalAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalAmountActionPerformed
+        TotalAmount();
+    }//GEN-LAST:event_btnTotalAmountActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,6 +332,7 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnCheckout;
     private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnTotalAmount;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -322,11 +349,10 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-
     List<BillDetail> billDetails = List.of();
     BillDAO billDao = new BillDAOImpl();
     BillDetailDAO billDetailDao = new BillDetailDAOImpl();
-    
+
     @Override
     public void fillBillDetails() {
         billDetails = billDetailDao.selectByBillId(bill.getId());
@@ -343,9 +369,9 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
                 quantity,
                 String.format("%.2f", discount),
                 String.format("%.2f", amount),
-                Boolean.FALSE  // cột checkbox
+                Boolean.FALSE // cột checkbox
             };
-                model.addRow(row);
+            model.addRow(row);
         }
     }
 
@@ -355,12 +381,12 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
 //        this.fillBillDetails();
 //        this.setForm(bill);
         if (bill != null) {
-        this.fillBillDetails();
-        this.setForm(bill);
-    } else {
-        JOptionPane.showMessageDialog(this, "Hóa đơn chưa được gán!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        this.dispose(); // hoặc không gọi setVisible nếu không cần hiển thị
-    }
+            this.fillBillDetails();
+            this.setForm(bill);
+        } else {
+            JOptionPane.showMessageDialog(this, "Hóa đơn chưa được gán!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            this.dispose(); // hoặc không gọi setVisible nếu không cần hiển thị
+        }
     }
 
     @Override
@@ -370,38 +396,57 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
 
     @Override
     public void showDrinkJDialog() {
-        DrinkJDialog dialog = new DrinkJDialog((Frame) this.getOwner(), true);
-        dialog.setBill(bill); // Khai báo vào DrinkJDialog @Setter Bill bill
+        DrinkJDialog dialog = new DrinkJDialog(new javax.swing.JFrame(), true);
+        dialog.setBill(this.bill); // Khai báo vào DrinkJDialog @Setter Bill bill
         dialog.setVisible(true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosed(java.awt.event.WindowEvent e) {
-        BillJDialog.this.fillBillDetails();
-        }
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                BillJDialog.this.fillBillDetails();
+            }
         });
     }
 
     @Override
     public void removeDrinks() {
         for (int i = 0; i < tblBillDetails.getRowCount(); i++) {
-        Boolean checked = (Boolean) tblBillDetails.getValueAt(i, 5);
-        if(checked)
-            billDetailDao.deleteById(billDetails.get(i).getId());
+            Boolean checked = (Boolean) tblBillDetails.getValueAt(i, 6);
+            if (checked) {
+                billDetailDao.deleteById(billDetails.get(i).getId());
+            }
         }
+        if (!bill.getUsername().equals(XAuth.user.getUsername())) {
+            XDialog.alert("Bạn không có quyền sửa hóa đơn của người khác!");
+            return;
+        }
+
         this.fillBillDetails();
     }
 
     @Override
     public void updateQuantity() {
-        if (bill.getStatus() == 0) { // chưa thanh toán hoặc chưa bị canceled
-        String input = XDialog.prompt("Số lượng mới?");
-        if (input != null && input.length() > 0) {
-        BillDetail detail = billDetails.get(tblBillDetails.getSelectedRow());
-        detail.setQuantity(Integer.parseInt(input));
-        billDetailDao.update(detail);
-        this.fillBillDetails();
+        if (bill.getStatus() == 0) { // chưa thanh toán hoặc chưa bị hủy
+            String input = XDialog.prompt("Số lượng mới?");
+            if (input != null && !input.trim().isEmpty()) {
+                try {
+                    int quantity = Integer.parseInt(input.trim());
+                    if (quantity <= 0) {
+                        XDialog.alert("Số lượng phải lớn hơn 0!");
+                        return;
+                    }
+                    BillDetail detail = billDetails.get(tblBillDetails.getSelectedRow());
+                    detail.setQuantity(quantity);
+                    billDetailDao.update(detail);
+                    this.fillBillDetails();
+                } catch (NumberFormatException e) {
+                    XDialog.alert("Vui lòng nhập số hợp lệ!");
+                }
+            }
         }
+        if (!bill.getUsername().equals(XAuth.user.getUsername())) {
+            XDialog.alert("Bạn không có quyền sửa hóa đơn của người khác!");
         }
+
     }
 
     @Override
@@ -410,7 +455,9 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
             bill.setStatus(Bill.Status.Completed.ordinal());
             bill.setCheckout(new Date());
             billDao.update(bill);
-            this.setForm(bill);
+            this.setForm(bill); // ✅ Cập nhật lại form với trạng thái mới
+            XDialog.alert("Thanh toán thành công!");
+            this.dispose();     // ✅ Hoặc đóng dialog nếu muốn
         }
     }
 
@@ -427,77 +474,42 @@ public final class BillJDialog extends javax.swing.JDialog implements BillContro
     }
 
     @Override
-public void setForm(Bill bill) {
-//    if (entity == null) {
-//        return; // hoặc bạn có thể xử lý khác nếu muốn
-//    }
-
-    txtId.setText(String.valueOf(bill.getId()));
-    txtCardId.setText("Card #" + bill.getCardId());
-    txtCheckin.setText(XDate.format(bill.getCheckin(), "HH:mm:ss dd-MM-yyyy"));
-    txtUsername.setText(bill.getUsername());
-    String[] statuses = {"Servicing", "Completed", "Canceled"};
-    txtStatus.setText(statuses[bill.getStatus()]);
-    if (bill.getCheckout() != null) {
-    txtCheckout.setText(XDate.format(bill.getCheckout(), "HH:mm:ss dd-MM-yyyy"));
+    public void setForm(Bill bill) {
+        txtId.setText(String.valueOf(bill.getId()));
+        txtCardId.setText("Card #" + bill.getCardId());
+        txtCheckin.setText(XDate.format(bill.getCheckin(), "HH:mm:ss dd-MM-yyyy"));
+        txtUsername.setText(bill.getUsername());
+        String[] statuses = {"Servicing", "Completed", "Canceled"};
+        txtStatus.setText(statuses[bill.getStatus()]);
+        if (bill.getCheckout() != null) {
+            txtCheckout.setText(XDate.format(bill.getCheckout(), "HH:mm:ss dd-MM-yyyy"));
+        }
+        boolean editable = (bill.getStatus() == 0);
+        btnAdd.setEnabled(editable);
+        btnCancel.setEnabled(editable);
+        btnCheckout.setEnabled(editable);
+        btnRemove.setEnabled(editable);
     }
-    boolean editable = (bill.getStatus() == 0);
-    btnAdd.setEnabled(editable);
-    btnCancel.setEnabled(editable);
-    btnCheckout.setEnabled(editable);
-    btnRemove.setEnabled(editable);
-}
 
+    public void TotalAmount() {
+        double total = 0;
+        for (int i = 0; i < tblBillDetails.getRowCount(); i++) {
+            String amountStr = tblBillDetails.getValueAt(i, 4).toString(); // Cột 4 = Thành tiền
+            try {
+                double amount = Double.parseDouble(amountStr);
+                total += amount;
+            } catch (NumberFormatException e) {
+                XDialog.alert("Lỗi định dạng tiền ở dòng " + (i + 1));
+                return;
+            }
+        }
+        XDialog.alert("Tổng tiền: " + String.format("%.2f", total) + " VNĐ");
+    }
 
-@Override
-public Bill getForm() {
-//    Bill b = new Bill();
-//    try {
-//        if (!txtId.getText().trim().isEmpty()) {
-//            b.setId(Long.valueOf(txtId.getText().trim()));
-//        }
-//    } catch (NumberFormatException e) {
-//        b.setId(0L); // hoặc xử lý khác
-//    }
-//
-//    try {
-//        b.setCardId(Integer.valueOf(txtCardId.getText().replace("Card #", "").trim()));
-//    } catch (NumberFormatException e) {
-//        b.setCardId(0);
-//    }
-//
-//    try {
-//        b.setCheckin(XDate.parse(txtCheckin.getText(), "HH:mm:ss dd-MM-yyyy"));
-//    } catch (Exception e) {
-//        b.setCheckin(null);
-//    }
-//
-//    b.setUsername(txtUsername.getText());
-//
-//    // Mapping text status về số
-//    String statusText = txtStatus.getText().trim();
-//    if (statusText.equals("Servicing")) {
-//        b.setStatus(Bill.Status.Servicing.ordinal());
-//    } else if (statusText.equals("Completed")) {
-//        b.setStatus(Bill.Status.Completed.ordinal());
-//    } else if (statusText.equals("Canceled")) {
-//        b.setStatus(Bill.Status.Canceled.ordinal());
-//    } else {
-//        b.setStatus(-1); // trạng thái không hợp lệ
-//    }
-//
-//    try {
-//        if (!txtCheckout.getText().trim().isEmpty()) {
-//            b.setCheckout(XDate.parse(txtCheckout.getText(), "HH:mm:ss dd-MM-yyyy"));
-//        }
-//    } catch (Exception e) {
-//        b.setCheckout(null);
-//    }
-//
-//    return b;
-    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-}
-
+    @Override
+    public Bill getForm() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     @Override
     public void selectTimeRange() {

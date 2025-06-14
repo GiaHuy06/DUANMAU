@@ -24,4 +24,5 @@ private String fullname;
 @Builder.Default
 private String photo = "photo.png";
 private boolean manager;
+private String email;
 }

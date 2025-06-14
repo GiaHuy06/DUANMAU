@@ -20,7 +20,7 @@ import poly.cafe.util.XIcon;
  *
  * @author admin
  */
-public final class UserManagerJDialog extends javax.swing.JDialog implements UserController{
+public final class UserManagerJDialog extends javax.swing.JDialog implements UserController {
 
     /**
      * Creates new form UserManagerJDialog
@@ -77,6 +77,7 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
         lblPhoto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Người sử dụng");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -384,10 +385,13 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
     int lastSelectedRow = -1;
     private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
         if (evt.getClickCount() == 2) {
-            this.edit();}
-        
+            this.edit();
+        }
+
         int selectedRow = tblUser.getSelectedRow();
-        if (selectedRow == -1) return;
+        if (selectedRow == -1) {
+            return;
+        }
 
         // Nếu có dòng cũ đã được mở, thì che lại
         if (lastSelectedRow != -1 && lastSelectedRow != selectedRow) {
@@ -426,7 +430,7 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
     }//GEN-LAST:event_btnMovePreviousActionPerformed
 
     private void btnMoveFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveFirstActionPerformed
-       this.moveFirst();
+        this.moveFirst();
     }//GEN-LAST:event_btnMoveFirstActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
@@ -533,7 +537,7 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
 
     UserDAO dao = new UserDAOImpl();
     List<User> items = List.of();
-    
+
     @Override
     public void open() {
         this.setLocationRelativeTo(null);
@@ -559,10 +563,10 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
         } else {
             rdoDisabled.setSelected(true);
         }
-        
+
         String imageName = entity.getPhoto(); // lấy tên ảnh từ entity
         if (imageName != null && !imageName.isEmpty()) {
-            File imgFile = new File("E:\\Java1\\PC10722\\src\\main\\java\\poly\\cafe\\images\\" + imageName);
+            File imgFile = new File("images", imageName);
             if (imgFile.exists()) {
                 XIcon.setIcon(lblPhoto, imgFile);  // hàm bạn dùng để set ảnh cho JLabel
                 lblPhoto.setToolTipText(imageName);
@@ -580,63 +584,70 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
     public User getForm() {
         User entity = new User();
         try {
-        // Lấy dữ liệu từ các ô nhập
-        String username = txtUsername.getText().trim();
-        String fullname = txtFullname.getText().trim();
-        String password = new String(txtPassword.getPassword()).trim();
-        String confirm = new String(txtConfirm.getPassword()).trim();
-        entity.setUsername(txtUsername.getText());
-        entity.setPassword(new String(txtPassword.getPassword()));
-        entity.setFullname(txtFullname.getText());
+            // Lấy dữ liệu từ các ô nhập
+            String username = txtUsername.getText().trim();
+            String fullname = txtFullname.getText().trim();
+            String password = new String(txtPassword.getPassword()).trim();
+            String confirm = new String(txtConfirm.getPassword()).trim();
+            entity.setUsername(txtUsername.getText());
+            entity.setPassword(new String(txtPassword.getPassword()));
+            entity.setFullname(txtFullname.getText());
 
-        if (username.isEmpty() || fullname.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-            XDialog.alert("Vui lòng điền đầy đủ thông tin!");
+            if (username.isEmpty() || fullname.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+                XDialog.alert("Vui lòng điền đầy đủ thông tin!");
+                return null;
+            }
+
+            if (!password.equals(confirm)) {
+                XDialog.alert("Mật khẩu xác nhận không khớp!");
+                return null;
+            }
+
+            // Kiểm tra mật khẩu đúng 8 ký tự, gồm chữ và số
+            if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8}$")) {
+                XDialog.alert("Mật khẩu phải đúng 8 ký tự và bao gồm cả chữ và số!");
+                return null;
+            }
+
+            // Lấy vai trò
+            boolean isManager = false;
+            if (rdoManager.isSelected()) {
+                isManager = true;
+            } else if (rdoEmployee.isSelected()) {
+                isManager = false;
+            } else {
+                XDialog.alert("Vui lòng chọn vai trò!");
+                return null;
+            }
+
+            entity.setManager(isManager);
+
+            // Lấy trạng thái
+            boolean isEnabled;
+            if (rdoEnabled.isSelected()) {
+                isEnabled = true;
+            } else if (rdoDisabled.isSelected()) {
+                isEnabled = false;
+            } else {
+                XDialog.alert("Vui lòng chọn trạng thái!");
+                return null;
+            }
+            entity.setEnabled(isEnabled);
+            entity.setPhoto(lblPhoto.getToolTipText());
+            return entity;
+        } catch (Exception e) {
+            XDialog.alert("Lỗi lấy dữ liệu form: " + e.getMessage());
             return null;
         }
-
-        if (!password.equals(confirm)) {
-            XDialog.alert( "Mật khẩu xác nhận không khớp!");
-            return null;
-        }
-
-        // Lấy vai trò
-        boolean isManager = false;
-        if (rdoManager.isSelected()) {
-            isManager = true;
-        } else if (rdoEmployee.isSelected()) {
-            isManager = false;
-        } else {
-            XDialog.alert( "Vui lòng chọn vai trò!");
-            return null;
-        }
-
-        entity.setManager(isManager);
-        
-        // Lấy trạng thái
-        boolean isEnabled;
-        if (rdoEnabled.isSelected()) {
-            isEnabled = true;
-        } else if (rdoDisabled.isSelected()) {
-            isEnabled = false;
-        } else {
-            XDialog.alert( "Vui lòng chọn trạng thái!");
-            return null;
-        }
-        entity.setEnabled(isEnabled);
-         return entity;
-        }catch (Exception e) {
-        XDialog.alert( "Lỗi lấy dữ liệu form: " + e.getMessage());
-        return null;
-    }
     }
 
     @Override
     public void fillToTable() {
         DefaultTableModel model = (DefaultTableModel) tblUser.getModel();
-            model.setRowCount(0);
-            items = dao.findAll();
-            items.forEach(item -> {
-                Object[] rowData = {
+        model.setRowCount(0);
+        items = dao.findAll();
+        items.forEach(item -> {
+            Object[] rowData = {
                 item.getUsername(),
                 "******",
                 item.getFullname(),
@@ -653,54 +664,61 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
     public void edit() {
         User entity = items.get(tblUser.getSelectedRow());
         this.setForm(entity);
-        this.setEditable(true);tabs.setSelectedIndex(1);
+        this.setEditable(true);
+        tabs.setSelectedIndex(1);
         tabs.setSelectedIndex(1);
     }
 
     @Override
     public void create() {
         User entity = this.getForm();
-        if (entity == null) return; // không tạo nếu lỗi form
-            try {
-                dao.create(entity);
-                this.fillToTable();
-                this.clear();
-                XDialog.alert("Tạo thành công!");
-            } catch (Exception e) {
-                XDialog.alert("Tạo thất bại: " + e.getMessage());
+        if (entity == null) {
+            return; // không tạo nếu lỗi form
+        }
+        try {
+            dao.create(entity);
+            this.fillToTable();
+            this.clear();
+            XDialog.alert("Tạo thành công!");
+        } catch (Exception e) {
+            XDialog.alert("Tạo thất bại: " + e.getMessage());
         }
     }
 
     @Override
     public void update() {
         User entity = this.getForm();
-        if (entity == null) return;
-            try {
-                dao.update(entity);
-                this.fillToTable();
-                XDialog.alert("Cập nhật thành công!");
-            } catch (Exception e) {
+        if (entity == null) {
+            return;
+        }
+        try {
+            dao.update(entity);
+            this.fillToTable();
+            XDialog.alert("Cập nhật thành công!");
+        } catch (Exception e) {
             XDialog.alert("Cập nhật thất bại: " + e.getMessage());
         }
     }
 
     @Override
     public void delete() {
-        if (!XDialog.confirm("Bạn thực sự muốn xóa?")) return;
-            try {
-                String input = txtUsername.getText().trim();
-                if (input.isEmpty()) {
-                    XDialog.alert("Vui lòng nhập ID để xóa!");
-                    return;
-                }
-                dao.deleteById(input);
-                this.fillToTable();
-                this.clear();
-                XDialog.alert("Xóa thành công!");
-            } catch (NumberFormatException e) {
-                XDialog.alert("Username không hợp lệ!");
-            } catch (Exception e) {
-                XDialog.alert("Xóa thất bại: " + e.getMessage());
+        if (!XDialog.confirm("Bạn thực sự muốn xóa?")) {
+            return;
+        }
+        try {
+            String input = txtUsername.getText().trim();
+            if (input.isEmpty()) {
+                XDialog.alert("Vui lòng nhập ID để xóa!");
+                return;
+            }
+            dao.deleteById(input);
+            this.fillToTable();
+            this.clear();
+            XDialog.alert("Xóa thành công!");
+        } catch (NumberFormatException e) {
+            XDialog.alert("Username không hợp lệ!");
+        } catch (Exception e) {
+            XDialog.alert("Xóa thất bại: " + e.getMessage());
         }
     }
 
@@ -710,6 +728,8 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
         txtFullname.setText("");
         txtPassword.setText("");
         txtConfirm.setText("");
+        lblPhoto.setIcon(null);
+        lblPhoto.setToolTipText(null);
         buttonGroup1.clearSelection();
         buttonGroup2.clearSelection();
     }
@@ -729,10 +749,10 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
 
     private void setCheckedAll(boolean checked) {
         for (int i = 0; i < tblUser.getRowCount(); i++) {
-            tblUser.setValueAt(checked, i, 2);
+            tblUser.setValueAt(checked, i, 6);
         }
     }
-    
+
     @Override
     public void checkAll() {
         this.setCheckedAll(true);
@@ -746,16 +766,16 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
     @Override
     public void deleteCheckedItems() {
         if (XDialog.confirm("Bạn thực sự muốn xóa các mục chọn?")) {
-            try{
+            try {
                 for (int i = 0; i < tblUser.getRowCount(); i++) {
-                    if ((Boolean) tblUser.getValueAt(i, 2)) {
+                    if ((Boolean) tblUser.getValueAt(i, 6)) {
                         dao.deleteById(items.get(i).getUsername());
                     }
                 }
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 XDialog.alert("Không thể xóa!");
             }
-        this.fillToTable();
+            this.fillToTable();
         }
     }
 
@@ -786,16 +806,16 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
             this.edit();
         }
     }
-    
+
     public void moveLast() {
         this.moveTo(tblUser.getRowCount() - 1);
     }
-    
+
     private final JFileChooser fileChooser = new JFileChooser();
 
     @Override
     public void chooseFile() {
-         fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "png", "jpeg", "gif"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "png", "jpeg", "gif"));
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             File file = XIcon.copyTo(selectedFile, "images");
@@ -803,7 +823,7 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
             XIcon.setIcon(lblPhoto, file);
         }
     }
-    
+
 //    public class BCryptUtil {
 //    public static String hash(String password) {
 //        return BCrypt.hashpw(password, BCrypt.gensalt(12));
@@ -813,5 +833,4 @@ public final class UserManagerJDialog extends javax.swing.JDialog implements Use
 //        return BCrypt.checkpw(password, hashed);
 //    }
 //    }
-
 }

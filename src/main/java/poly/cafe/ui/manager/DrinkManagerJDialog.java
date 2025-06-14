@@ -22,23 +22,24 @@ import poly.cafe.ui.DrinkController;
 import poly.cafe.util.XDialog;
 import poly.cafe.util.XIcon;
 
-
 /**
  *
  * @author admin
  */
-public final class DrinkManagerJDialog extends javax.swing.JDialog implements DrinkController{
+public final class DrinkManagerJDialog extends javax.swing.JDialog implements DrinkController {
 
     /**
      * Creates new form DrinkManagerJDialog
+     * @param parent
+     * @param modal
      */
     public DrinkManagerJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        open();
         fillCategories();
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -84,6 +85,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         jSeparator1 = new javax.swing.JSeparator();
         btnMovePrevious = new javax.swing.JButton();
         btnMoveFirst = new javax.swing.JButton();
+        lblGiamGiaValue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -160,28 +162,28 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(303, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCheckAll)
                 .addGap(26, 26, 26)
                 .addComponent(btnUncheckAll)
                 .addGap(26, 26, 26)
                 .addComponent(btnDeleteCheckedItems)
-                .addGap(29, 29, 29))
+                .addGap(25, 25, 25))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCheckAll)
                     .addComponent(btnUncheckAll)
                     .addComponent(btnDeleteCheckedItems))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tabs.addTab("DANH SÁCH", jPanel1);
@@ -293,6 +295,8 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
             }
         });
 
+        lblGiamGiaValue.setText("0%");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -315,12 +319,16 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(SlGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(rdoSanco)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdoHetHang))))
+                                        .addComponent(rdoHetHang))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(SlGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblGiamGiaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(146, 146, 146)
@@ -342,7 +350,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnMoveLast))
                     .addComponent(jSeparator1))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -362,9 +370,11 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(SlGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(SlGiamGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblGiamGiaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -387,7 +397,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
                     .addComponent(btnMovePrevious)
                     .addComponent(btnMoveNext)
                     .addComponent(btnMoveLast))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         tabs.addTab("BIỂU MẪU", jPanel2);
@@ -396,9 +406,9 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 706, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tabs)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,11 +444,11 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       this.delete();
+        this.delete();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-       this.clear();
+        this.clear();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnMoveLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveLastActionPerformed
@@ -458,12 +468,13 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     }//GEN-LAST:event_btnMoveFirstActionPerformed
 
     private void txtGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaActionPerformed
-        
+
     }//GEN-LAST:event_txtGiaActionPerformed
 
     private void tblDrinksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDrinksMouseClicked
         if (evt.getClickCount() == 2) {
-            this.edit();}
+            this.edit();
+        }
     }//GEN-LAST:event_tblDrinksMouseClicked
 
     private void tblCategoriesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriesMouseClicked
@@ -542,6 +553,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblGiamGiaValue;
     private javax.swing.JLabel lblImage;
     private javax.swing.JRadioButton rdoHetHang;
     private javax.swing.JRadioButton rdoSanco;
@@ -556,6 +568,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     DrinkDAO dao = new DrinkDAOImpl();
     List<Drink> items = List.of();
     List<Category> categories = List.of();
+
     @Override
     public void fillCategories() {
         DefaultComboBoxModel cboModel = (DefaultComboBoxModel) cboCategories.getModel();
@@ -567,19 +580,19 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         categories.forEach(category -> {
             cboModel.addElement(category);
             tblModel.addRow(new Object[]{category.getName()});
-            });
+        });
         SwingUtilities.invokeLater(() -> {
-        if (tblCategories.getRowCount() > 0) {
-            tblCategories.setRowSelectionInterval(0, 0); // chọn dòng đầu tiên sau khi bảng render
-        }
-    });
+            if (tblCategories.getRowCount() > 0) {
+                tblCategories.setRowSelectionInterval(0, 0); // chọn dòng đầu tiên sau khi bảng render
+            }
+        });
     }
 
     private final JFileChooser fileChooser = new JFileChooser();
-    
+
     @Override
     public void chooseFile() {
-        if(fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             File file = XIcon.copyTo(selectedFile, "images");
             lblImage.setToolTipText(file.getName());
@@ -591,14 +604,24 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     public void open() {
         this.setLocationRelativeTo(null);
         this.clear();
+        // Cấu hình slider giảm giá
+        SlGiamGia.setMinimum(0);               // giá trị tối thiểu
+        SlGiamGia.setMaximum(100);             // giá trị tối đa (100%)
+        SlGiamGia.setMajorTickSpacing(20);     // mỗi vạch chính cách 20%
+        SlGiamGia.setMinorTickSpacing(5);      // mỗi vạch phụ cách 5%
+        SlGiamGia.setPaintTicks(true);         // hiển thị vạch chia
+        SlGiamGia.setPaintLabels(true);        // hiển thị nhãn % trên vạch
         tblCategories.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            fillToTable(); // tự động load đồ uống khi chọn loại
-        }
+            if (!e.getValueIsAdjusting()) {
+                fillToTable(); // tự động load đồ uống khi chọn loại
+            }
+        });
+        SlGiamGia.addChangeListener(e -> {
+            int value = SlGiamGia.getValue();
+            lblGiamGiaValue.setText(value + "%");
         });
     }
 
-    
     @Override
     public void setForm(Drink entity) {
         txtId.setText(entity.getId());
@@ -621,10 +644,10 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         } else {
             rdoHetHang.setSelected(true);
         }
-        
+
         String imageName = entity.getImage(); // lấy tên ảnh từ entity
         if (imageName != null && !imageName.isEmpty()) {
-            File imgFile = new File("E:\\Java1\\PC10722\\src\\main\\java\\poly\\cafe\\images\\" + imageName);
+            File imgFile = new File("images", imageName);
             if (imgFile.exists()) {
                 XIcon.setIcon(lblImage, imgFile);  // hàm bạn dùng để set ảnh cho JLabel
                 lblImage.setToolTipText(imageName);
@@ -641,7 +664,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     @Override
     public Drink getForm() {
         Drink entity = new Drink();
-    
+
         entity.setId(txtId.getText().trim());
         entity.setName(txtTen.getText().trim());
 
@@ -660,19 +683,18 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         }
 
         // Giảm giá: từ slider (int)
-        entity.setDiscount(SlGiamGia.getValue());
+        entity.setDiscount(SlGiamGia.getValue() / 100.0);
 
         // Trạng thái: còn hàng hay hết hàng
         entity.setAvailable(rdoSanco.isSelected());
 
         // Image hoặc các trường khác nếu có thì set thêm ở đây
-
         return entity;
     }
 
     @Override
     public void fillToTable() {
-         DefaultTableModel model = (DefaultTableModel) tblDrinks.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblDrinks.getModel();
         model.setRowCount(0);
 
         DrinkDAO dao = new DrinkDAOImpl();
@@ -680,7 +702,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         items = dao.findByCategoryId(category.getId()); // thay vì findAll()
 
         for (Drink dr : items) {
-            Object[] obj = {dr.getId(), dr.getName(), dr.getUnitPrice(), dr.getDiscount(), dr.isAvailable()? "Sẵn có" : "Hết hàng"};
+            Object[] obj = {dr.getId(), dr.getName(), dr.getUnitPrice(), dr.getDiscount(), dr.isAvailable() ? "Sẵn có" : "Hết hàng"};
             model.addRow(obj);
         }
     }
@@ -688,7 +710,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     @Override
     public void edit() {
         int selectRow = tblDrinks.getSelectedRow();
-        if(selectRow < 0){
+        if (selectRow < 0) {
             XDialog.alert("Vui lòng chọn để sửa!");
             return;
         }
@@ -701,47 +723,53 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     @Override
     public void create() {
         Drink entity = this.getForm();
-        if (entity == null) return; // không tạo nếu lỗi form
-            try {
-                dao.create(entity);
-                this.fillToTable();
-                this.clear();
-                XDialog.alert("Tạo thành công!");
-            } catch (Exception e) {
-                XDialog.alert("Tạo thất bại: " + e.getMessage());
+        if (entity == null) {
+            return; // không tạo nếu lỗi form
+        }
+        try {
+            dao.create(entity);
+            this.fillToTable();
+            this.clear();
+            XDialog.alert("Tạo thành công!");
+        } catch (Exception e) {
+            XDialog.alert("Tạo thất bại: " + e.getMessage());
         }
     }
 
     @Override
     public void update() {
         Drink entity = this.getForm();
-        if (entity == null) return;
-            try {
-                dao.update(entity);
-                this.fillToTable();
-                XDialog.alert("Cập nhật thành công!");
-            } catch (Exception e) {
+        if (entity == null) {
+            return;
+        }
+        try {
+            dao.update(entity);
+            this.fillToTable();
+            XDialog.alert("Cập nhật thành công!");
+        } catch (Exception e) {
             XDialog.alert("Cập nhật thất bại: " + e.getMessage());
         }
     }
 
     @Override
     public void delete() {
-        if (!XDialog.confirm("Bạn thực sự muốn xóa?")) return;
-            try {
-                String input = txtId.getText().trim();
-                if (input.isEmpty()) {
-                    XDialog.alert("Vui lòng nhập ID để xóa!");
-                    return;
-                }
-                dao.deleteById(input);
-                this.fillToTable();
-                this.clear();
-                XDialog.alert("Xóa thành công!");
-            } catch (NumberFormatException e) {
-                XDialog.alert("Id không hợp lệ!");
-            } catch (Exception e) {
-                XDialog.alert("Xóa thất bại: " + e.getMessage());
+        if (!XDialog.confirm("Bạn thực sự muốn xóa?")) {
+            return;
+        }
+        try {
+            String input = txtId.getText().trim();
+            if (input.isEmpty()) {
+                XDialog.alert("Vui lòng nhập ID để xóa!");
+                return;
+            }
+            dao.deleteById(input);
+            this.fillToTable();
+            this.clear();
+            XDialog.alert("Xóa thành công!");
+        } catch (NumberFormatException e) {
+            XDialog.alert("Id không hợp lệ!");
+        } catch (Exception e) {
+            XDialog.alert("Xóa thất bại: " + e.getMessage());
         }
     }
 
@@ -751,6 +779,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
         txtTen.setText("");
         txtGia.setText("");
         SlGiamGia.setValue(0); // reset slider về 0%
+        lblGiamGiaValue.setText("0%"); 
         cboCategories.setSelectedIndex(-1); // không chọn danh mục nào
         buttonGroup1.clearSelection();
     }
@@ -773,7 +802,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
             tblDrinks.setValueAt(checked, i, 5);
         }
     }
-    
+
     @Override
     public void checkAll() {
         this.setCheckedAll(true);
@@ -787,16 +816,16 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
     @Override
     public void deleteCheckedItems() {
         if (XDialog.confirm("Bạn thực sự muốn xóa các mục chọn?")) {
-            try{
+            try {
                 for (int i = 0; i < tblDrinks.getRowCount(); i++) {
                     if ((Boolean) tblDrinks.getValueAt(i, 2)) {
                         dao.deleteById(items.get(i).getId());
                     }
                 }
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 XDialog.alert("Không thể xóa!");
             }
-        this.fillToTable();
+            this.fillToTable();
         }
     }
 
@@ -827,7 +856,7 @@ public final class DrinkManagerJDialog extends javax.swing.JDialog implements Dr
             this.edit();
         }
     }
-    
+
     public void moveLast() {
         this.moveTo(tblDrinks.getRowCount() - 1);
     }

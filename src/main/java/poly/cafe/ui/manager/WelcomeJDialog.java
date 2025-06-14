@@ -4,6 +4,7 @@
  */
 package poly.cafe.ui.manager;
 
+import javax.swing.SwingUtilities;
 import poly.cafe.ui.WelcomeController;
 
 /**
@@ -42,10 +43,11 @@ public class WelcomeJDialog extends javax.swing.JDialog implements WelcomeContro
             }
         });
 
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/poly/cafe/icons/trump-small.png"))); // NOI18N
         jLabel2.setText("jLabel2");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Zilla Slab SemiBold", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 153, 0));
         jLabel1.setText("POLY CAFE");
 
@@ -54,27 +56,27 @@ public class WelcomeJDialog extends javax.swing.JDialog implements WelcomeContro
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(155, 155, 155)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(231, 231, 231))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(prb, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(prb, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(prb, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -133,19 +135,26 @@ public class WelcomeJDialog extends javax.swing.JDialog implements WelcomeContro
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void waiting() {
-        this.setLocationRelativeTo(null);
-        new Thread(() -> {
-            try {
-                for (var i = 0; i <= 100; i++) {
-                    prb.setValue(i);
-                    Thread.sleep(10);
-                }
-                WelcomeJDialog.this.dispose();
-            } catch (InterruptedException ex) {
-                System.exit(0);
+public void waiting() {
+    this.setLocationRelativeTo(null);
+    prb.setStringPainted(true); // Hiển thị % trên thanh tiến trình
+
+    new Thread(() -> {
+        try {
+            for (int i = 0; i <= 100; i++) {
+                final int progress = i;
+                SwingUtilities.invokeLater(() -> {
+                    prb.setValue(progress);
+                    prb.setString(progress + "%");
+                });
+                Thread.sleep(10);
             }
-        }).start();
-    }
+            WelcomeJDialog.this.dispose();
+        } catch (InterruptedException ex) {
+            System.exit(0);
+        }
+    }).start();
+}
+
 
 }

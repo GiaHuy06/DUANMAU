@@ -11,4 +11,5 @@ import poly.cafe.entity.User;
  * @author admin
  */
 public interface UserDAO extends CrudDAO<User, String>{
+    User findByEmail(String email);
 }

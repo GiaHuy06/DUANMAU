@@ -14,7 +14,8 @@ import poly.cafe.util.XQuery;
  * @author admin
  */
 public class BillDetailDAOImpl implements BillDetailDAO {
-    String createSql = "INSERT INTO BillDetails(BillId, DrinkId, UnitPrice, Discount, Quantity) VALUES(?, ?, ?, ?, ?)";
+
+    String createSql = "INSERT INTO BillDetails( BillId, DrinkId, UnitPrice, Discount, Quantity) VALUES(?, ?, ?, ?, ?)";
     String updateSql = "UPDATE BillDetails SET BillId=?, DrinkId=?, UnitPrice=?, Discount=?, Quantity=? WHERE Id=?";
     String deleteSql = "DELETE FROM BillDetails WHERE Id=?";
     String findAllSql = "SELECT bd.*, d.name AS drinkName FROM BillDetails bd JOIN Drinks d ON d.Id=bd.DrinkId";
@@ -23,7 +24,6 @@ public class BillDetailDAOImpl implements BillDetailDAO {
     String findByDrinkIdSql = "SELECT bd.*, d.name AS drinkName FROM BillDetails bd JOIN Drinks d ON d.Id=bd.DrinkId WHERE bd.DrinkId=?";
     String selectByBillIdSql = "SELECT * FROM BillDetails WHERE BillId = ?";
 
-
     @Override
     public BillDetail create(BillDetail entity) {
         Object[] values = {
@@ -31,8 +31,7 @@ public class BillDetailDAOImpl implements BillDetailDAO {
             entity.getDrinkId(),
             entity.getUnitPrice(),
             entity.getDiscount(),
-            entity.getQuantity(),
-        };
+            entity.getQuantity(),};
         XJdbc.executeUpdate(createSql, values);
         return entity;
     }
@@ -64,7 +63,7 @@ public class BillDetailDAOImpl implements BillDetailDAO {
     public BillDetail findById(Long id) {
         return XQuery.getSingleBean(BillDetail.class, findByIdSql, id);
     }
-    
+
     @Override
     public List<BillDetail> findByBillId(Long billId) {
         return XQuery.getBeanList(BillDetail.class, findByBillIdSql, billId);
@@ -77,8 +76,18 @@ public class BillDetailDAOImpl implements BillDetailDAO {
 
     @Override
     public List<BillDetail> selectByBillId(Long billId) {
-        String sql = "SELECT * FROM BillDetails WHERE BillId = ?";
-        //return XQuery.getBeanList(BillDetail.class, sql, billId);
+        String sql = "SELECT bd.*, d.Name AS drinkName "
+                + "FROM BillDetails bd "
+                + "JOIN Drinks d ON d.Id = bd.DrinkId "
+                + "WHERE bd.BillId = ?";
         return XQuery.getBeanList(BillDetail.class, sql, billId);
     }
+
+    @Override
+    public BillDetail selectByBillIdAndDrinkId(Long billId, String drinkId) {
+        String sql = "SELECT * FROM BillDetails WHERE BillId = ? AND DrinkId = ?";
+        List<BillDetail> list = XQuery.getBeanList(BillDetail.class, sql, billId, drinkId);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
 }

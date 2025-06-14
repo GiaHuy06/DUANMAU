@@ -97,4 +97,19 @@ public class XQuery {
         String sql = "SELECT * FROM Users WHERE Fullname LIKE ?";
         List<User> list = XQuery.getBeanList(User.class, sql, "%Nguyễn %");
     }
+    
+    public static <B> List<B> getEntityList(Class<B> beanClass, String sql, Object... values) {
+        List<B> list = new ArrayList<>();
+        try {
+            ResultSet resultSet = XJdbc.executeQuery(sql, values);
+            while (resultSet.next()) {
+                B bean = readBean(resultSet, beanClass);
+                list.add(bean);
+            }
+            resultSet.getStatement().getConnection().close();
+        } catch (Exception ex) {
+            throw new RuntimeException("Lỗi khi truy vấn danh sách " + beanClass.getSimpleName(), ex);
+        }
+        return list;
+    }
 }

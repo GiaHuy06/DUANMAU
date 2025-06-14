@@ -5,7 +5,9 @@
 package poly.cafe.ui;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.table.DefaultTableModel;
+import poly.cafe.dao.impl.BillDetailDAO;
 import poly.cafe.dao.impl.BillDetailDAOImpl;
 import poly.cafe.dao.impl.CategoryDAO;
 import poly.cafe.dao.impl.CategoryDAOImpl;
@@ -21,25 +23,26 @@ import poly.cafe.util.XDialog;
  *
  * @author admin
  */
-public final class DrinkJDialog extends javax.swing.JDialog  implements DrinkController{
+public final class DrinkJDialog extends javax.swing.JDialog implements DrinkController {
 
     /**
      * Creates new form DrinkJDialog
+     *
      * @param parent
      * @param modal
      */
     public DrinkJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.bill = bill;
         initComponents();
         open();
     }
     private Bill bill;
-    
+
     @Override
     public void setBill(Bill bill) {
         this.bill = bill;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,7 +124,7 @@ public final class DrinkJDialog extends javax.swing.JDialog  implements DrinkCon
     }//GEN-LAST:event_tblCategoriesMouseClicked
 
     private void tblDrinksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDrinksMouseClicked
-        if(evt.getClickCount() == 2){
+        if (evt.getClickCount() == 2) {
             this.addDrinkToBill();
         }
     }//GEN-LAST:event_tblDrinksMouseClicked
@@ -181,7 +184,7 @@ public final class DrinkJDialog extends javax.swing.JDialog  implements DrinkCon
     List<Category> categories = List.of();
     DrinkDAO drinkDao = new DrinkDAOImpl();
     List<Drink> drinks = List.of();
-    
+
     @Override
     public void open() {
         this.setLocationRelativeTo(null);
@@ -269,39 +272,80 @@ public final class DrinkJDialog extends javax.swing.JDialog  implements DrinkCon
         categories = categoryDao.findAll();
         DefaultTableModel model = (DefaultTableModel) tblCategories.getModel();
         model.setRowCount(0);
-        categories.forEach(d -> model.addRow(new Object[] {d.getName()}));
+        categories.forEach(d -> model.addRow(new Object[]{d.getName()}));
         tblCategories.setRowSelectionInterval(0, 0);
     }
 
     @Override
     public void fillDrinks() {
+        // Lấy category đang chọn
         Category category = categories.get(tblCategories.getSelectedRow());
-        drinks = drinkDao.findByCategoryId(category.getId());
+
+        // Lấy danh sách đồ uống theo category, chỉ lấy món còn hàng (available == true)
+        drinks = drinkDao.findByCategoryId(category.getId())
+                .stream()
+                .filter(Drink::isAvailable) // Lọc đồ uống còn hàng
+                .collect(Collectors.toList());
+
+        // Lấy model bảng đồ uống và xóa dữ liệu cũ
         DefaultTableModel model = (DefaultTableModel) tblDrinks.getModel();
         model.setRowCount(0);
-        drinks.forEach(d -> {
-        Object[] row = {
-            d.getId(),
-            d.getName(),
-            String.format("$%.1f", d.getUnitPrice()),
-            String.format("%.0f%%", d.getDiscount()*100)
-        };
-        model.addRow(row);
-        });
+
+        // Thêm từng đồ uống vào bảng
+        for (Drink d : drinks) {
+            double discount = d.getDiscount();
+            if (discount > 1) {
+                discount = discount / 100.0;
+            }
+
+            Object[] row = {
+                d.getId(),
+                d.getName(),
+                String.format("%,.0f VNĐ", d.getUnitPrice()),
+                String.format("%.0f%%", discount * 100)
+            };
+            model.addRow(row);
+        }
+
     }
 
     @Override
     public void addDrinkToBill() {
-        String quantity = XDialog.prompt("Số lượng?");
-        if(quantity != null && quantity.length() > 0){
-            Drink drink = drinks.get(tblDrinks.getSelectedRow());
-            BillDetail detail = new BillDetail();
-            detail.setBillId(bill.getId());
-            detail.setDiscount(drink.getDiscount());
-            detail.setDrinkId(drink.getId());
-            detail.setQuantity(Integer.parseInt(quantity));
-            detail.setUnitPrice(drink.getUnitPrice());
-            new BillDetailDAOImpl().create(detail);
+        String quantityInput = XDialog.prompt("Số lượng?");
+        if (quantityInput != null && !quantityInput.trim().isEmpty()) {
+            try {
+                int quantity = Integer.parseInt(quantityInput.trim());
+                if (quantity <= 0) {
+                    XDialog.alert("Số lượng phải lớn hơn 0!");
+                    return;
+                }
+
+                Drink drink = drinks.get(tblDrinks.getSelectedRow());
+                BillDetailDAO billDetailDao = new BillDetailDAOImpl();
+
+                // Kiểm tra xem đồ uống này đã có trong hóa đơn chưa
+                BillDetail existing = billDetailDao.selectByBillIdAndDrinkId(bill.getId(), drink.getId());
+                if (existing != null) {
+                    // Nếu đã có, cập nhật số lượng
+                    existing.setQuantity(existing.getQuantity() + quantity);
+                    billDetailDao.update(existing);
+                } else {
+                    // Nếu chưa có, thêm mới
+                    BillDetail detail = new BillDetail();
+                    detail.setBillId(bill.getId());
+                    detail.setDiscount(drink.getDiscount());
+                    detail.setDrinkId(drink.getId());
+                    detail.setQuantity(quantity);
+                    detail.setUnitPrice(drink.getUnitPrice());
+                    billDetailDao.create(detail);
+                }
+
+                // Cập nhật lại bảng chi tiết hóa đơn
+               // ((BillJDialog) this.getOwner()).fillBillDetails();
+
+            } catch (NumberFormatException e) {
+                XDialog.alert("Vui lòng nhập số hợp lệ!");
+            }
         }
     }
 

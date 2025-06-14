@@ -4,6 +4,7 @@
  */
 package poly.cafe.dao.impl;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import poly.cafe.entity.Bill;
@@ -15,7 +16,9 @@ import poly.cafe.util.XQuery;
  *
  * @author admin
  */
+
 public class BillDAOImpl implements BillDAO {
+
     String createSql = "INSERT INTO Bills(Username, CardId, Checkin, Checkout, Status) VALUES(?, ?, ?, ?, ?)";
     String updateSql = "UPDATE Bills SET Username=?, CardId=?, Checkin=?, Checkout=?, Status=? WHERE Id=?";
     String deleteSql = "DELETE FROM Bills WHERE Id=?";
@@ -24,7 +27,7 @@ public class BillDAOImpl implements BillDAO {
     String findByUsernameSql = "SELECT * FROM Bills WHERE Username=?";
     String findByCardIdSql = "SELECT * FROM Bills WHERE CardId=?";
     String findByTimeRangeSql = "SELECT * FROM Bills WHERE Checkin BETWEEN ? AND ? ORDER BY Checkin DESC";
-    
+
     @Override
     public Bill create(Bill entity) {
         if (entity.getCheckin() == null) {
@@ -41,6 +44,7 @@ public class BillDAOImpl implements BillDAO {
         return entity;
     }
 
+
     @Override
     public void update(Bill entity) {
         Object[] values = {
@@ -49,8 +53,7 @@ public class BillDAOImpl implements BillDAO {
             entity.getCheckin(),
             entity.getCheckout(),
             entity.getStatus(),
-            entity.getId(),
-        };
+            entity.getId(),};
         XJdbc.executeUpdate(updateSql, values);
     }
 
@@ -58,12 +61,12 @@ public class BillDAOImpl implements BillDAO {
     public List< Bill> findAll() {
         return XQuery.getBeanList(Bill.class, findAllSql);
     }
-    
+
     @Override
     public List<Bill> findByUsername(String username) {
         return XQuery.getBeanList(Bill.class, findByUsernameSql, username);
     }
-    
+
     @Override
     public List<Bill> findByCardId(Integer cardId) {
         return XQuery.getBeanList(Bill.class, findByCardIdSql, cardId);
@@ -96,9 +99,9 @@ public class BillDAOImpl implements BillDAO {
             newBill.setUsername(XAuth.user.getUsername());
             bill = this.create(newBill); // insert
         }
-            return bill;
+        return bill;
     }
-    
+
     @Override
     public List<Bill> findByUserAndTimeRange(String username, Date begin, Date end) {
         // Kiểm tra nếu là quản lý thì bỏ lọc theo username
@@ -117,7 +120,18 @@ public class BillDAOImpl implements BillDAO {
             return false;
         }
         String sql = "SELECT Manager FROM Users WHERE Username = ?";
-        Boolean isManager = XJdbc.getValue(sql, username); 
+        Boolean isManager = XJdbc.getValue(sql, username);
         return isManager != null && isManager;
+    }
+
+    @Override
+    public void insert(Bill bill) {
+        String sql = "INSERT INTO Bills (CardId, Checkin, Status, Username) VALUES (?, ?, ?, ?)";
+        XJdbc.executeUpdate(sql,
+                bill.getCardId(),
+                bill.getCheckin(),
+                bill.getStatus(),
+                bill.getUsername()
+        );
     }
 }
