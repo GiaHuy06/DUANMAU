@@ -125,7 +125,11 @@ public final class DrinkJDialog extends javax.swing.JDialog implements DrinkCont
 
     private void tblDrinksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDrinksMouseClicked
         if (evt.getClickCount() == 2) {
-            this.addDrinkToBill();
+            int row = tblDrinks.getSelectedRow();
+            if (row >= 0) {
+                Drink entity = drinks.get(row);  // Lấy đồ uống theo hàng được chọn
+                check(entity);                   // Gọi hàm kiểm tra trước khi thêm
+            }
         }
     }//GEN-LAST:event_tblDrinksMouseClicked
 
@@ -190,6 +194,14 @@ public final class DrinkJDialog extends javax.swing.JDialog implements DrinkCont
         this.setLocationRelativeTo(null);
         this.fillCategories();
         this.fillDrinks();
+    }
+
+    public void check(Drink entity) {
+        if (entity.isAvailable()) {
+            this.addDrinkToBill();
+        } else {
+            XDialog.alert("Hết hàng!");
+        }
     }
 
     @Override
@@ -320,30 +332,33 @@ public final class DrinkJDialog extends javax.swing.JDialog implements DrinkCont
                     return;
                 }
 
-                Drink drink = drinks.get(tblDrinks.getSelectedRow());
+                int selectedRow = tblDrinks.getSelectedRow();
+                if (selectedRow < 0) {
+                    XDialog.alert("Vui lòng chọn đồ uống!");
+                    return;
+                }
+
+                Drink drink = drinks.get(selectedRow);
                 BillDetailDAO billDetailDao = new BillDetailDAOImpl();
 
-                // Kiểm tra xem đồ uống này đã có trong hóa đơn chưa
                 BillDetail existing = billDetailDao.selectByBillIdAndDrinkId(bill.getId(), drink.getId());
                 if (existing != null) {
-                    // Nếu đã có, cập nhật số lượng
                     existing.setQuantity(existing.getQuantity() + quantity);
                     billDetailDao.update(existing);
                 } else {
-                    // Nếu chưa có, thêm mới
                     BillDetail detail = new BillDetail();
                     detail.setBillId(bill.getId());
-                    detail.setDiscount(drink.getDiscount());
                     detail.setDrinkId(drink.getId());
                     detail.setQuantity(quantity);
                     detail.setUnitPrice(drink.getUnitPrice());
+                    detail.setDiscount(drink.getDiscount());
                     billDetailDao.create(detail);
                 }
 
-                // Cập nhật lại bảng chi tiết hóa đơn
-               // ((BillJDialog) this.getOwner()).fillBillDetails();
+                ((BillJDialog) this.getOwner()).fillBillDetails(); // Gỡ comment nếu cần
 
             } catch (NumberFormatException e) {
+                e.printStackTrace();
                 XDialog.alert("Vui lòng nhập số hợp lệ!");
             }
         }
